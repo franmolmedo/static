@@ -1,17 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+  <head>
+    <title></title>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
-  <title>Vanilla JavaScript App</title>
-</head>
+    <meta charset="utf-8" />
 
-<body>
-  <main>
-    <h1>Vanilla JavaScript App</h1>
-  </main>
-</body>
+    <!-- Ensures that IE and Edge uses the latest version and doesn't emulate an older version -->
+    <meta http-equiv="x-ua-compatible" content="IE=Edge" />
 
+    <!-- Ensures the web page looks good on all screen sizes. -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Add references to the Azure Maps Map control JavaScript and CSS files. -->
+    <link
+      rel="stylesheet"
+      href="https://atlas.microsoft.com/sdk/javascript/mapcontrol/3/atlas.min.css"
+      type="text/css"
+    />
+    <script src="https://atlas.microsoft.com/sdk/javascript/mapcontrol/3/atlas.min.js"></script>
+
+    <script type="text/javascript">
+      //Create an instance of the map control and set some options.
+
+      function InitMap() {
+        var map = new atlas.Map("myMap", {
+          center: [8.96, 46.00],
+          zoom: 12,
+          language: "en-US",
+          authOptions: {
+            authType: "subscriptionKey",
+            subscriptionKey: "tE55o9ZrZ5_nRZP7xQhAasyG5fep2-9IJRnWe6UOkHM",
+          },
+        });
+
+        map.events.add("ready", function () {
+          //Create a data source and add it to the map.
+          var datasource = new atlas.source.DataSource();
+          datasource.importDataFromUrl("https://stdigicitiesdev.blob.core.windows.net/raw/lugano_subset_swissbuildings3D.gml?sp=r&st=2023-08-30T11:11:57Z&se=2023-08-30T19:11:57Z&spr=https&sv=2022-11-02&sr=b&sig=w9kCgcbwUCKo0p0lXg3rDR9Lzv%2BYvMgk5TyjAgQ5x7w%3D");
+          map.sources.add(datasource);
+
+          //Add a simple data layer for rendering data.
+          var layer = new atlas.layer.PolygonLayer(datasource);
+          map.layers.add(layer);
+        });
+      }
+    </script>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+      }
+
+      #myMap {
+        height: 100vh;
+        width: 100vw;
+      }
+    </style>
+  </head>
+  <body onload="InitMap()">
+    <div id="myMap"></div>
+  </body>
 </html>
